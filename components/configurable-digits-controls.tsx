@@ -42,6 +42,7 @@ import { TradeTypeChips } from '@/components/custom/trade-type-chips';
 import { SymbolSelector } from '@/components/custom/symbol-selector';
 import { useAppTranslations } from '@/components/custom/i18n-provider';
 import { getSubmarketDisplayName } from '@/lib/active-symbols-display-names';
+import { centerInScrollContainer } from '@/lib/scroll-within-frame';
 import { cn } from '@/lib/utils';
 import type { ActiveSymbol, Tick, ProposalInfo, DurationLimits } from '@deriv/core';
 import { CurrentTickDisplay } from './current-tick-display';
@@ -297,12 +298,12 @@ export function ConfigurableDigitsControls(props: ConfigurableDigitsControlsProp
     return () => window.clearTimeout(timer);
   }, [rearrangeMode, hasFlashed]);
 
-  // Scroll the selected control into view in edit mode.
+  // Scroll the selected control into view within the editor's own scroll container in edit mode.
   const rowRefs = useRef<Record<string, HTMLElement | null>>({});
   useEffect(() => {
     if (!editMode || !selectedKey) return;
     const el = rowRefs.current[selectedKey];
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (el) centerInScrollContainer(el);
   }, [editMode, selectedKey]);
 
   // ── Trade type (3 styles) ───────────────────────────────────────────────
